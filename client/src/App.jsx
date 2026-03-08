@@ -4,6 +4,7 @@ import Nav from "./components/nav";
 import Home from "./Home";
 import Shop from "./Shop";
 import Contact from "./Contact";
+import Product from "./Product";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/:id" element={<Product />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
