@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./Product.css";
+import { useContext } from "react";
+import { CartContext } from "./context/CartContext";
 
 const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const API_URL = `${import.meta.env.VITE_API_URL}/products/${id}`;
+
+  const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,7 +46,14 @@ const Product = () => {
       />
       <p className="product-price">£{product.price}</p>
       <p className="product-description">{product.description || "No description available."}</p>
-      <button className="product-button">Add to Cart</button>
+      <button
+        className="product-button"
+        onClick={() => {
+          addToCart(product);
+        }}
+      >
+        Add to Cart
+      </button>
     </div>
   );
 };
