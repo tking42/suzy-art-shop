@@ -40,27 +40,35 @@ const Shop = () => {
   };
 
   return (
-    <div className="shop-layout">
-      <h1 className="shop-title">Suzy's Shop</h1>
-      <p className="shop-sub-heading">Lorem Ipsum, Lorem, Ipsum Loren, Ipsum.</p>
-      <div className="products-grid">
-        {products.map((product) => (
-          <div className="product-card" key={product._id} onClick={() => navigate(`/shop/${product._id}`)}>
-            <img
-              src={getImageSrc(product.image)}
-              alt={product.name}
-              className="product-image"
-            />
-            <div className="product-info">
-              <div>
-                <p className="product-name">{product.name}</p>
-                <p className="product-price">£{product.price}</p>
+    <>
+      <button
+        className="checkout-button"
+        onClick={() => navigate("/checkout")}
+      >
+        Checkout
+      </button>
+      <div className="shop-layout">
+        <h1 className="shop-title">Suzy's Shop</h1>
+        <p className="shop-sub-heading">Lorem Ipsum, Lorem, Ipsum Loren, Ipsum.</p>
+        <div className="products-grid">
+          {products.map((product) => (
+            <div className="product-card" key={product._id} onClick={() => navigate(`/shop/${product._id}`)}>
+              <img
+                src={getImageSrc(product.image)}
+                alt={product.name}
+                className="product-image"
+              />
+              <div className="product-info">
+                <div>
+                  <p className="product-name">{product.name}</p>
+                  <p className="product-price">£{product.price}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

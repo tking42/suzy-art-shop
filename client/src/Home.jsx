@@ -16,7 +16,7 @@ const Home = () => {
     <div className="hero-layout">
       
       <div className="hero-text">
-        <h1>Suzy Parr's Portfolio</h1>
+        <h1>Tea and Cake Productions</h1>
         <p>Lorem Ipsum, Lorem Ipsum, Lorem Ipsum.</p>
         
         <button onClick={() => (window.location.href = "/shop")}>

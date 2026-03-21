@@ -32,3 +32,8 @@
     color: white;
     transform: translateY(-2px);
   }
+
+  .checkout-button {
+    position: absolute;
+    right: 20px;
+  }

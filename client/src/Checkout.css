@@ -1,0 +1,49 @@
+.checkout-page {
+    max-width: 900px;
+    margin: auto;
+    position: relative;
+  }
+  
+  .checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+  }
+  
+  .checkout-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .checkout-info {
+    flex: 1;
+  }
+  
+  .qty-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 1.25rem;
+  }
+  
+  .qty-controls button {
+    margin-top: 0 !important;
+    font-size: 1.25rem;
+    padding: 5px 10px !important;
+  }
+  
+  .item-total {
+    font-weight: bold;
+  }
+  
+  .checkout-total {
+    text-align: right;
+  }
+  
+  .buy-button {
+    position: absolute;
+    right: 0;
+  }

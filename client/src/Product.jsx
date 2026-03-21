@@ -4,8 +4,10 @@ import axios from "axios";
 import "./Product.css";
 import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const Product = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const API_URL = `${import.meta.env.VITE_API_URL}/products/${id}`;
@@ -38,23 +40,31 @@ const Product = () => {
   if (!product) return <p>Loading product...</p>;
 
   return (
-    <div className="product-details">
-      <h1>{product.name}</h1>
-      <img
-        src={getImageSrc(product.image)}
-        alt={product.name}
-      />
-      <p className="product-price">£{product.price}</p>
-      <p className="product-description">{product.description || "No description available."}</p>
+    <>
       <button
-        className="product-button"
-        onClick={() => {
-          addToCart(product);
-        }}
+        className="checkout-button"
+        onClick={() => navigate("/checkout")}
       >
-        Add to Cart
+        Checkout
       </button>
-    </div>
+      <div className="product-details">
+        <h1>{product.name}</h1>
+        <img
+          src={getImageSrc(product.image)}
+          alt={product.name}
+        />
+        <p className="product-price">£{product.price}</p>
+        <p className="product-description">{product.description || "No description available."}</p>
+        <button
+          className="product-button"
+          onClick={() => {
+            addToCart(product);
+          }}
+        >
+          Add to Cart
+        </button>
+      </div>
+    </>
   );
 };
 
