@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
+import { ToastContext } from "./context/ToastContext";
 import "./Checkout.css";
+import axios from "axios";
 
 const Checkout = () => {
   const {
@@ -9,6 +11,7 @@ const Checkout = () => {
     decreaseQty,
     removeFromCart
   } = useContext(CartContext);
+  const { addToast } = useContext(ToastContext);
 
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -39,7 +42,10 @@ const Checkout = () => {
 
             <button
               className="remove-btn"
-              onClick={() => removeFromCart(item._id)}
+              onClick={() => {
+                removeFromCart(item._id);
+                addToast(`${item.name} removed from cart`);
+              }}
             >
               Remove
             </button>
@@ -55,7 +61,23 @@ const Checkout = () => {
         <h2>Total: £{total.toFixed(2)}</h2>
       </div>
 
-      <button className="buy-button">
+      <button
+        className="buy-button"
+        onClick={async () => {
+          try {
+            const res = await axios.post(
+              `${import.meta.env.VITE_API_URL}/create-checkout-session`,
+              { cart }
+            );
+
+            window.location.href = res.data.url;
+
+          } catch (error) {
+            console.error("Checkout error:", error);
+            addToast("Something went wrong. Please try again.", "error");
+          }
+        }}
+      >
         Proceed to Payment
       </button>
     </div>

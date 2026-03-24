@@ -4,6 +4,7 @@ import axios from "axios";
 import "./Product.css";
 import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
+import { ToastContext } from "./context/ToastContext";
 import { useNavigate } from "react-router-dom";
 
 const Product = () => {
@@ -13,6 +14,7 @@ const Product = () => {
   const API_URL = `${import.meta.env.VITE_API_URL}/products/${id}`;
 
   const { addToCart } = useContext(CartContext);
+  const { addToast } = useContext(ToastContext);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -59,6 +61,7 @@ const Product = () => {
           className="product-button"
           onClick={() => {
             addToCart(product);
+            addToast(`${product.name} added to cart`);
           }}
         >
           Add to Cart
