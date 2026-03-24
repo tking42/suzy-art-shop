@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }, // optional for guest checkout
-  email: { type: String, required: true }, // for guest checkout
+  email: { type: String },
   items: [{
     product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
     name: String,

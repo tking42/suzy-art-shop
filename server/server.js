@@ -1,40 +1,48 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const Stripe = require("stripe");
 require("dotenv").config();
 
-// Route imports
-// const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
-// const orderRoutes = require("./routes/orderRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const Order = require("./models/Order");
+const { createPendingOrder } = require("./controllers/orderController");
 
 const app = express();
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Middleware
 app.use(cors());
-app.use(express.json());
 
-// Routes
-// app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-// app.use("/api/orders", orderRoutes);
+// Webhook must receive raw body for signature verification — registered before express.json()
+app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, res) => {
+  const sig = req.headers["stripe-signature"];
+  let event;
 
-// Root route (optional)
-app.get("/", (req, res) => {
-  res.send("API is running");
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error("Webhook signature error:", err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === "payment_intent.succeeded") {
+    const paymentIntent = event.data.object;
+    await Order.findOneAndUpdate(
+      { paymentIntentId: paymentIntent.id },
+      { status: "Paid" }
+    );
+  }
+
+  res.json({ received: true });
 });
 
-// Connect DB and start server
-const PORT = process.env.PORT || 5050;
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("MongoDB Connected");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch(err => console.error(err));
+app.use(express.json());
 
-const Stripe = require("stripe");
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+
+app.get("/", (req, res) => res.send("API is running"));
 
 app.post("/api/create-payment-intent", async (req, res) => {
   try {
@@ -51,10 +59,19 @@ app.post("/api/create-payment-intent", async (req, res) => {
       payment_method_types: ["card"],
     });
 
-    res.json({ clientSecret: paymentIntent.client_secret });
+    await createPendingOrder(cart, paymentIntent.id);
 
+    res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Stripe error" });
   }
 });
+
+const PORT = process.env.PORT || 5050;
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => console.error(err));
