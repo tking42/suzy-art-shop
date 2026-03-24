@@ -7,6 +7,7 @@ require("dotenv").config();
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const Order = require("./models/Order");
+const Product = require("./models/Product");
 const { createPendingOrder } = require("./controllers/orderController");
 
 const app = express();
@@ -28,10 +29,22 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
-    await Order.findOneAndUpdate(
+
+    const order = await Order.findOneAndUpdate(
       { paymentIntentId: paymentIntent.id },
-      { status: "Paid" }
+      { status: "Paid" },
+      { new: true }
     );
+
+    if (order) {
+      await Promise.all(
+        order.items.map((item) =>
+          Product.findByIdAndUpdate(item.product, {
+            $inc: { stock: -item.quantity },
+          })
+        )
+      );
+    }
   }
 
   res.json({ received: true });
