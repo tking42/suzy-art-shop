@@ -27,3 +27,46 @@
   .navButton.active {
     border-bottom: 2px solid black;
   }
+
+  .subNav {
+    display: flex;
+    justify-content: flex-end;
+    padding: 6px 20px;
+    background: #fafafa;
+  }
+
+  .subNavButton {
+    text-decoration: none;
+    font-size: 13px;
+    color: black;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .subNavButton:hover {
+    text-decoration: underline;
+  }
+
+  .subNavButton--disabled {
+    color: #aaa;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .subNavButton--disabled:hover {
+    text-decoration: none;
+  }
+
+  .basketCount {
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

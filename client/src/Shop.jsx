@@ -41,12 +41,6 @@ const Shop = () => {
 
   return (
     <>
-      <button
-        className="checkout-button"
-        onClick={() => navigate("/checkout")}
-      >
-        Checkout
-      </button>
       <div className="shop-layout">
         <h1 className="shop-title">Suzy's Shop</h1>
         <p className="shop-sub-heading">Lorem Ipsum, Lorem, Ipsum Loren, Ipsum.</p>

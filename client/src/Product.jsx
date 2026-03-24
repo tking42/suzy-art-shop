@@ -5,10 +5,7 @@ import "./Product.css";
 import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
 import { ToastContext } from "./context/ToastContext";
-import { useNavigate } from "react-router-dom";
-
 const Product = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const API_URL = `${import.meta.env.VITE_API_URL}/products/${id}`;
@@ -43,12 +40,6 @@ const Product = () => {
 
   return (
     <>
-      <button
-        className="basket-button"
-        onClick={() => navigate("/basket")}
-      >
-        Basket
-      </button>
       <div className="product-details">
         <h1>{product.name}</h1>
         <img
