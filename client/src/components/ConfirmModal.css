@@ -1,0 +1,43 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.modal {
+  background: #fff;
+  border: 1px solid #111;
+  padding: 36px 40px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal p {
+  margin: 0 0 28px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.modal-actions button {
+  margin-top: 0;
+}
+
+.modal-confirm {
+  background: #111;
+  color: #fff;
+}
+
+.modal-confirm:hover {
+  background: #333;
+}

@@ -44,10 +44,10 @@ const Product = () => {
   return (
     <>
       <button
-        className="checkout-button"
-        onClick={() => navigate("/checkout")}
+        className="basket-button"
+        onClick={() => navigate("/basket")}
       >
-        Checkout
+        Basket
       </button>
       <div className="product-details">
         <h1>{product.name}</h1>
