@@ -6,6 +6,7 @@ import Shop from "./Shop";
 import Contact from "./Contact";
 import Product from "./Product";
 import Basket from "./Basket";
+import Payment from "./Payment";
 import Success from "./Success";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/shop/:id" element={<Product />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/basket" element={<Basket />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/success" element={<Success />} />
         </Routes>
       </div>

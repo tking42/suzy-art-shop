@@ -4,7 +4,6 @@ import { CartContext } from "./context/CartContext";
 import { ToastContext } from "./context/ToastContext";
 import ConfirmModal from "./components/ConfirmModal";
 import "./Basket.css";
-import axios from "axios";
 
 const Basket = () => {
   const { cart, increaseQty, decreaseQty, removeFromCart } = useContext(CartContext);
@@ -72,21 +71,7 @@ const Basket = () => {
         <h2>Total: £{total.toFixed(2)}</h2>
       </div>
 
-      <button
-        className="buy-button"
-        onClick={async () => {
-          try {
-            const res = await axios.post(
-              `${import.meta.env.VITE_API_URL}/create-checkout-session`,
-              { cart }
-            );
-            window.location.href = res.data.url;
-          } catch (error) {
-            console.error("Basket error:", error);
-            addToast("Something went wrong. Please try again.", "error");
-          }
-        }}
-      >
+      <button className="buy-button" onClick={() => navigate("/payment")}>
         Proceed to Payment
       </button>
     </div>

@@ -36,31 +36,22 @@ mongoose.connect(process.env.MONGO_URI)
 const Stripe = require("stripe");
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-app.post("/api/create-checkout-session", async (req, res) => {
+app.post("/api/create-payment-intent", async (req, res) => {
   try {
     const { cart } = req.body;
 
-    const line_items = cart.map(item => ({
-      price_data: {
-        currency: "gbp",
-        product_data: {
-          name: item.name,
-          images: [item.image], // optional
-        },
-        unit_amount: item.price * 100, // Stripe uses pence
-      },
-      quantity: item.quantity,
-    }));
+    const amount = cart.reduce(
+      (sum, item) => sum + Math.round(item.price * item.quantity * 100),
+      0
+    );
 
-    const session = await stripe.checkout.sessions.create({
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "gbp",
       payment_method_types: ["card"],
-      line_items,
-      mode: "payment",
-      success_url: "http://localhost:5174/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:5174/checkout",
     });
 
-    res.json({ url: session.url });
+    res.json({ clientSecret: paymentIntent.client_secret });
 
   } catch (error) {
     console.error(error);

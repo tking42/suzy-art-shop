@@ -1,0 +1,62 @@
+.payment-page {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.payment-page h1 {
+  text-align: center;
+  font-size: 2.5rem;
+}
+
+.order-summary h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 20px;
+}
+
+.summary-item {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.summary-name {
+  flex: 1;
+}
+
+.summary-qty {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.payment-form {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pay-button {
+  width: 100%;
+  margin-top: 0;
+}
+
+.payment-loading {
+  text-align: center;
+  margin-top: 80px;
+  color: #999;
+}
