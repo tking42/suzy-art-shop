@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const authRoutes = require("./routes/authRoutes");
 const Order = require("./models/Order");
 const Product = require("./models/Product");
 const { createPendingOrder } = require("./controllers/orderController");
@@ -86,6 +87,7 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
 app.use(express.json());
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
+app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
