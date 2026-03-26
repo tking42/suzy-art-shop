@@ -1,0 +1,40 @@
+.about-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.about-page h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 32px;
+}
+
+.about-intro {
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 40px;
+  margin-bottom: 40px;
+  color: #444;
+}
+
+.about-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.about-section h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 16px;
+}
+
+.about-section p {
+  line-height: 1.8;
+  color: #444;
+  margin: 0 0 12px;
+}
