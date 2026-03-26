@@ -28,6 +28,16 @@ const orderSchema = new mongoose.Schema({
     default: "Pending",
   },
 
+  shippingAddress: {
+    name: String,
+    line1: String,
+    line2: String,
+    city: String,
+    postcode: String,
+  },
+
+  shippingCost: { type: Number, default: 4.99 },
+
   // Stripe PaymentIntent ID — used to match this order when the webhook fires
   paymentIntentId: String,
 

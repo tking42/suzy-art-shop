@@ -12,7 +12,7 @@ const authRoutes = require("./routes/authRoutes");
 const Order = require("./models/Order");
 const Product = require("./models/Product");
 const { createPendingOrder } = require("./controllers/orderController");
-const { sendOrderConfirmation } = require("./utils/email");
+const { sendOrderConfirmation, sendAdminOrderNotification } = require("./utils/email");
 
 const app = express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
@@ -69,8 +69,8 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
         )
       );
 
-      // Send confirmation email using the address collected at checkout.
-      // Failure is caught separately so it doesn't affect order or stock updates.
+      // Send confirmation email to customer and notification to admin.
+      // Failures are caught separately so they don't affect order or stock updates.
       if (order.email) {
         try {
           await sendOrderConfirmation(order.email, order);
@@ -78,6 +78,12 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
         } catch (err) {
           console.error("Failed to send confirmation email:", err.message);
         }
+      }
+
+      try {
+        await sendAdminOrderNotification(order);
+      } catch (err) {
+        console.error("Failed to send admin notification:", err.message);
       }
     }
   }
@@ -128,14 +134,17 @@ app.get("/", (req, res) => res.send("API is running"));
 // the Stripe Payment Element) and simultaneously saves a pending Order to the
 // database. The order is later updated to "Paid" by the webhook above.
 // Amounts are in pence (GBP) as required by Stripe.
+const SHIPPING_COST_PENCE = 499; // £4.99
+
 app.post("/api/create-payment-intent", async (req, res) => {
   try {
-    const { cart, email } = req.body;
+    const { cart, email, shippingAddress } = req.body;
 
-    const amount = cart.reduce(
+    const itemsAmount = cart.reduce(
       (sum, item) => sum + Math.round(item.price * item.quantity * 100),
       0
     );
+    const amount = itemsAmount + SHIPPING_COST_PENCE;
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
@@ -143,8 +152,8 @@ app.post("/api/create-payment-intent", async (req, res) => {
       payment_method_types: ["card"],
     });
 
-    // Save a pending order with the customer's email straight away
-    await createPendingOrder(cart, paymentIntent.id, email);
+    // Save a pending order with the customer's email and shipping address straight away
+    await createPendingOrder(cart, paymentIntent.id, email, shippingAddress);
 
     res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {

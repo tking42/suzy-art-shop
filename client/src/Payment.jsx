@@ -7,6 +7,8 @@ import { ToastContext } from "./context/ToastContext";
 import axios from "axios";
 import "./Payment.css";
 
+const SHIPPING_COST = 4.99;
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const appearance = {
@@ -70,11 +72,14 @@ const PaymentForm = ({ email }) => {
   );
 };
 
+const emptyAddress = { name: "", line1: "", line2: "", city: "", postcode: "" };
+
 const Payment = () => {
   const { cart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [shippingAddress, setShippingAddress] = useState(emptyAddress);
   const [clientSecret, setClientSecret] = useState(null);
   const [loadingIntent, setLoadingIntent] = useState(false);
 
@@ -82,14 +87,18 @@ const Payment = () => {
     if (cart.length === 0) navigate("/shop");
   }, []);
 
-  const handleEmailSubmit = async (e) => {
+  const handleAddressChange = (e) => {
+    setShippingAddress((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleDetailsSubmit = async (e) => {
     e.preventDefault();
     setLoadingIntent(true);
 
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/create-payment-intent`,
-        { cart, email }
+        { cart, email, shippingAddress }
       );
       setClientSecret(res.data.clientSecret);
     } catch {
@@ -99,7 +108,8 @@ const Payment = () => {
     }
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const itemsTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const grandTotal = itemsTotal + SHIPPING_COST;
 
   return (
     <div className="payment-page">
@@ -115,15 +125,20 @@ const Payment = () => {
               <span className="summary-price">£{(item.price * item.quantity).toFixed(2)}</span>
             </div>
           ))}
+          <div className="summary-item summary-shipping">
+            <span className="summary-name">Shipping (UK)</span>
+            <span className="summary-price">£{SHIPPING_COST.toFixed(2)}</span>
+          </div>
           <div className="summary-total">
             <span>Total</span>
-            <span>£{total.toFixed(2)}</span>
+            <span>£{grandTotal.toFixed(2)}</span>
           </div>
         </div>
 
         {!clientSecret ? (
-          <form onSubmit={handleEmailSubmit} className="payment-form">
-            <div className="email-field">
+          <form onSubmit={handleDetailsSubmit} className="payment-form">
+            <div className="form-section-label">Contact</div>
+            <div className="checkout-field">
               <label htmlFor="email">Email</label>
               <input
                 id="email"
@@ -134,6 +149,31 @@ const Payment = () => {
                 required
               />
             </div>
+
+            <div className="form-section-label">Shipping Address</div>
+            <div className="checkout-field">
+              <label htmlFor="name">Full Name</label>
+              <input id="name" name="name" value={shippingAddress.name} onChange={handleAddressChange} required />
+            </div>
+            <div className="checkout-field">
+              <label htmlFor="line1">Address Line 1</label>
+              <input id="line1" name="line1" value={shippingAddress.line1} onChange={handleAddressChange} required />
+            </div>
+            <div className="checkout-field">
+              <label htmlFor="line2">Address Line 2 <span className="optional">(optional)</span></label>
+              <input id="line2" name="line2" value={shippingAddress.line2} onChange={handleAddressChange} />
+            </div>
+            <div className="checkout-field-row">
+              <div className="checkout-field">
+                <label htmlFor="city">City</label>
+                <input id="city" name="city" value={shippingAddress.city} onChange={handleAddressChange} required />
+              </div>
+              <div className="checkout-field">
+                <label htmlFor="postcode">Postcode</label>
+                <input id="postcode" name="postcode" value={shippingAddress.postcode} onChange={handleAddressChange} required />
+              </div>
+            </div>
+
             <button type="submit" disabled={loadingIntent} className="pay-button">
               {loadingIntent ? "Loading..." : "Continue to Payment"}
             </button>

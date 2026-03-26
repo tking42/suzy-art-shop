@@ -34,6 +34,10 @@
   font-size: 0.8rem;
 }
 
+.summary-shipping .summary-name {
+  color: #666;
+}
+
 .summary-total {
   display: flex;
   justify-content: space-between;
@@ -47,22 +51,41 @@
   margin-top: 32px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px;
 }
 
-.email-field {
+/* ── Checkout fields ─────────────────────────────── */
+
+.form-section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #555;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  margin-top: 8px;
+}
+
+.checkout-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.email-field label {
+.checkout-field label {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.7rem;
 }
 
-.email-field input {
+.checkout-field .optional {
+  text-transform: none;
+  letter-spacing: 0;
+  color: #999;
+  font-size: 0.7rem;
+}
+
+.checkout-field input {
   border: 1px solid #ccc;
   padding: 10px 12px;
   font-size: 14px;
@@ -72,13 +95,19 @@
   background: #fff;
 }
 
-.email-field input:focus {
+.checkout-field input:focus {
   border-color: #111;
+}
+
+.checkout-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .pay-button {
   width: 100%;
-  margin-top: 0;
+  margin-top: 8px;
 }
 
 .payment-layout {
@@ -100,5 +129,9 @@
 
   .payment-layout {
     gap: 32px;
+  }
+
+  .checkout-field-row {
+    grid-template-columns: 1fr;
   }
 }

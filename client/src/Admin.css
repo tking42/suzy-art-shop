@@ -27,6 +27,56 @@
   gap: 20px;
 }
 
+/* ── Tabs ─────────────────────────────────────────── */
+
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 32px;
+}
+
+.admin-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 20px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  color: #999;
+  margin-bottom: -1px;
+  border-radius: 0;
+}
+
+.admin-tab:hover {
+  background-color: transparent;
+  color: #111;
+}
+
+.admin-tab--active {
+  color: #111;
+  border-bottom-color: #111;
+}
+
+/* ── Status Badge ─────────────────────────────────── */
+
+.admin-status {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.admin-status--pending  { color: #999; }
+.admin-status--paid     { color: #27ae60; }
+.admin-status--shipped  { color: #2980b9; }
+.admin-status--delivered { color: #111; }
+
 /* ── Page Layout ──────────────────────────────────── */
 
 .admin-page {
@@ -54,7 +104,7 @@
 .admin-main {
   max-width: 960px;
   margin: 40px auto;
-  padding: 0 32px;
+  padding: 0 32px 20px;
 }
 
 .admin-section-header {
@@ -141,6 +191,7 @@
   border-collapse: collapse;
   background: #fff;
   border: 1px solid #e0e0e0;
+  margin-bottom: 100px;
 }
 
 .admin-table th {
@@ -255,8 +306,15 @@
     grid-template-columns: 1fr;
   }
 
+  /* Products table: hide stock column */
   .admin-table th:nth-child(3),
   .admin-table td:nth-child(3) {
+    display: none;
+  }
+
+  /* Orders table: hide ship-to column */
+  .admin-table th:nth-child(5),
+  .admin-table td:nth-child(5) {
     display: none;
   }
 }

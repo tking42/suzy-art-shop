@@ -28,8 +28,15 @@ Run both concurrently in separate terminals. The client proxies API requests to 
 ### Database Seeding
 ```bash
 cd server
-node seed.js     # Seed products into MongoDB
+node seed.js          # Seed products into MongoDB
+node createAdmin.js   # Create the admin user (run once)
 ```
+
+### Stripe webhook (local dev)
+```bash
+stripe listen --forward-to localhost:5050/api/webhook
+```
+Use the `whsec_...` printed by this command as `STRIPE_WEBHOOK_SECRET` in `server/.env` during development.
 
 ## Architecture
 
@@ -37,26 +44,27 @@ node seed.js     # Seed products into MongoDB
 - **Routing**: React Router v7 — routes defined in `client/src/App.jsx`
 - **Cart state**: `CartContext` in `client/src/context/CartContext.jsx` — persisted to `localStorage`, wraps the whole app in `main.jsx`
 - **API calls**: `axios` using `import.meta.env.VITE_API_URL` as base URL
-- **Payment**: Stripe — checkout creates a session via `POST /api/create-checkout-session`, then redirects to Stripe-hosted page; success redirects to `/success`
+- **Payment flow**: customer fills email + shipping address → `POST /api/create-payment-intent` → Stripe card form loads → on success redirects to `/success`
+- **Admin**: `/admin/login` and `/admin` (JWT-protected) — outside the Nav/Footer layout
 
 ### Backend (Express 5 + MongoDB)
 - **Entry point**: `server/server.js` — mounts routes, connects to MongoDB Atlas, starts on `PORT` from `.env`
-- **DB connection**: `server/config/db.js` (Mongoose)
-- **Active routes**: `/api/products` (CRUD), `/api/create-checkout-session` (Stripe)
-- **Prepared but commented out**: `/api/auth`, `/api/orders`, `/api/cart` — controllers and models exist, routes just need to be uncommented in `server.js`
+- **Active routes**: `/api/products` (CRUD, write operations admin-protected), `/api/orders`, `/api/auth`, `/api/upload` (admin-protected image upload)
+- **Webhook**: `POST /api/webhook` — registered before `express.json()` for raw body; handles `payment_intent.succeeded` to mark order Paid, decrement stock, email customer + admin
 
 ### Data Models
 - **Product**: `name`, `description`, `price`, `stock`, `image`
 - **User**: `name`, `email`, `password` (bcrypt), `isAdmin`
-- **Order**: `user` (optional), `email`, `items[]`, `total`, `status` (Pending/Paid/Shipped/Delivered), `paymentIntentId`
+- **Order**: `email`, `items[]`, `total`, `shippingCost`, `shippingAddress` (name/line1/line2/city/postcode), `status` (Pending/Paid/Shipped/Delivered), `paymentIntentId`, `emailSent`
 
 ### Environment Variables
 - `client/.env`: `VITE_API_URL`, `VITE_STRIPE_PUBLIC_KEY`
-- `server/.env`: `MONGO_URI`, `PORT`, `STRIPE_SECRET_KEY`
+- `server/.env`: `MONGO_URI`, `PORT`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `JWT_SECRET`, `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`, `EMAIL_FROM`
 
 ## Key Implementation Details
 
-- Product images are served as static files from `client/public/images/products/`
-- The Stripe success redirect URL is hardcoded to `http://localhost:5174/success` in `server.js` — update this for production
-- Auth middleware exists at `server/middleware/authMiddleware.js` (JWT-based) but is not yet wired up to any routes
-- `server/utils/email.js` exists (Nodemailer) but is not currently used
+- **Shipping cost** is defined in two places — keep them in sync: `SHIPPING_COST` in `client/src/Payment.jsx` and `SHIPPING_COST_PENCE` in `server/server.js`
+- Product images uploaded via admin are stored in `server/public/uploads/` (local only — swap to cloud storage before deploy)
+- Product images from `client/public/images/products/` are served by Vite; uploaded images at `/uploads/*` are served by Express — `getImageSrc()` in Shop/Product handles both
+- `server/utils/email.js` has three functions: `sendOrderConfirmation` (customer), `sendAdminOrderNotification` (admin on new order), `sendShippingNotification` (customer on dispatch)
+- Auth middleware at `server/middleware/authMiddleware.js` — `protect` verifies JWT, `isAdmin` checks the flag
