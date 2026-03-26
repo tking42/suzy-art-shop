@@ -9,13 +9,32 @@ const orderRoutes = require("./routes/orderRoutes");
 const Order = require("./models/Order");
 const Product = require("./models/Product");
 const { createPendingOrder } = require("./controllers/orderController");
+const { sendOrderConfirmation } = require("./utils/email");
 
 const app = express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Allow requests from the React frontend
 app.use(cors());
 
-// Webhook must receive raw body for signature verification — registered before express.json()
+// ─── Stripe Webhook ───────────────────────────────────────────────────────────
+// This must be registered BEFORE express.json() because Stripe signature
+// verification requires the raw request body. Once express.json() parses it,
+// the raw bytes are lost and verification will fail.
+//
+// Flow:
+//   1. User completes payment on the Payment page
+//   2. Stripe calls this endpoint with a signed event payload
+//   3. We verify the signature using STRIPE_WEBHOOK_SECRET to confirm it
+//      genuinely came from Stripe (not a spoofed request)
+//   4. On payment_intent.succeeded we:
+//      a. Retrieve the charge to get the customer's email from billing details
+//      b. Mark the order as Paid and store the email
+//      c. Decrement stock for each purchased item
+//      d. Send a confirmation email to the customer
+//
+// Local development: use `stripe listen --forward-to localhost:5050/api/webhook`
+// which provides its own signing secret (different from the dashboard one).
 app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, res) => {
   const sig = req.headers["stripe-signature"];
   let event;
@@ -30,6 +49,7 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object;
 
+    // Mark the pending order as Paid
     const order = await Order.findOneAndUpdate(
       { paymentIntentId: paymentIntent.id },
       { status: "Paid" },
@@ -37,6 +57,7 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
     );
 
     if (order) {
+      // Decrement stock for each item in the order
       await Promise.all(
         order.items.map((item) =>
           Product.findByIdAndUpdate(item.product, {
@@ -44,22 +65,41 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
           })
         )
       );
+
+      // Send confirmation email using the address collected at checkout.
+      // Failure is caught separately so it doesn't affect order or stock updates.
+      if (order.email) {
+        try {
+          await sendOrderConfirmation(order.email, order);
+          await Order.findByIdAndUpdate(order._id, { emailSent: true });
+        } catch (err) {
+          console.error("Failed to send confirmation email:", err.message);
+        }
+      }
     }
   }
 
   res.json({ received: true });
 });
 
+// Parse JSON bodies for all other routes
 app.use(express.json());
 
+// ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => res.send("API is running"));
 
+// ─── Payment Intent ───────────────────────────────────────────────────────────
+// Called when the user proceeds from the basket to the payment page.
+// Creates a Stripe PaymentIntent (which gives the client a secret to initialise
+// the Stripe Payment Element) and simultaneously saves a pending Order to the
+// database. The order is later updated to "Paid" by the webhook above.
+// Amounts are in pence (GBP) as required by Stripe.
 app.post("/api/create-payment-intent", async (req, res) => {
   try {
-    const { cart } = req.body;
+    const { cart, email } = req.body;
 
     const amount = cart.reduce(
       (sum, item) => sum + Math.round(item.price * item.quantity * 100),
@@ -72,7 +112,8 @@ app.post("/api/create-payment-intent", async (req, res) => {
       payment_method_types: ["card"],
     });
 
-    await createPendingOrder(cart, paymentIntent.id);
+    // Save a pending order with the customer's email straight away
+    await createPendingOrder(cart, paymentIntent.id, email);
 
     res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
@@ -81,6 +122,7 @@ app.post("/api/create-payment-intent", async (req, res) => {
   }
 });
 
+// ─── Database & Server Start ──────────────────────────────────────────────────
 const PORT = process.env.PORT || 5050;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

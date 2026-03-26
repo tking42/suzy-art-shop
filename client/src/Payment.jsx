@@ -23,34 +23,16 @@ const appearance = {
     spacingUnit: "5px",
   },
   rules: {
-    ".Input": {
-      border: "1px solid #ccc",
-      boxShadow: "none",
-      padding: "10px 12px",
-    },
-    ".Input:focus": {
-      border: "1px solid #111",
-      boxShadow: "none",
-      outline: "none",
-    },
-    ".Label": {
-      textTransform: "uppercase",
-      letterSpacing: "1px",
-      fontSize: "0.7rem",
-      marginBottom: "6px",
-    },
-    ".Tab": {
-      border: "1px solid #ddd",
-      boxShadow: "none",
-    },
-    ".Tab--selected": {
-      border: "1px solid #111",
-      boxShadow: "none",
-    },
+    ".Input": { border: "1px solid #ccc", boxShadow: "none", padding: "10px 12px" },
+    ".Input:focus": { border: "1px solid #111", boxShadow: "none", outline: "none" },
+    ".Label": { textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.7rem", marginBottom: "6px" },
+    ".Tab": { border: "1px solid #ddd", boxShadow: "none" },
+    ".Tab--selected": { border: "1px solid #111", boxShadow: "none" },
   },
 };
 
-const PaymentForm = () => {
+// Inner form — must live inside <Elements> to access useStripe/useElements
+const PaymentForm = ({ email }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { addToast } = useContext(ToastContext);
@@ -66,6 +48,9 @@ const PaymentForm = () => {
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/success`,
+        payment_method_data: {
+          billing_details: { email },
+        },
       },
     });
 
@@ -77,7 +62,7 @@ const PaymentForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="payment-form">
-      <PaymentElement />
+      <PaymentElement options={{ fields: { billingDetails: { email: "never" } } }} />
       <button type="submit" disabled={!stripe || loading} className="pay-button">
         {loading ? "Processing..." : "Pay Now"}
       </button>
@@ -89,26 +74,32 @@ const Payment = () => {
   const { cart } = useContext(CartContext);
   const { addToast } = useContext(ToastContext);
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
   const [clientSecret, setClientSecret] = useState(null);
+  const [loadingIntent, setLoadingIntent] = useState(false);
 
   useEffect(() => {
-    if (cart.length === 0) {
-      navigate("/shop");
-      return;
-    }
-
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/create-payment-intent`, { cart })
-      .then((res) => setClientSecret(res.data.clientSecret))
-      .catch(() => {
-        addToast("Could not initialise payment. Please try again.", "error");
-        navigate("/basket");
-      });
+    if (cart.length === 0) navigate("/shop");
   }, []);
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    setLoadingIntent(true);
 
-  if (!clientSecret) return <p className="payment-loading">Loading...</p>;
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/create-payment-intent`,
+        { cart, email }
+      );
+      setClientSecret(res.data.clientSecret);
+    } catch {
+      addToast("Could not initialise payment. Please try again.", "error");
+    } finally {
+      setLoadingIntent(false);
+    }
+  };
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <div className="payment-page">
@@ -130,21 +121,35 @@ const Payment = () => {
           </div>
         </div>
 
-        <Elements
-          stripe={stripePromise}
-          options={{
-            clientSecret,
-            appearance,
-            fonts: [
-              {
-                cssSrc:
-                  "https://api.fontshare.com/v2/css?f[]=clash-display@400&display=swap",
-              },
-            ],
-          }}
-        >
-          <PaymentForm />
-        </Elements>
+        {!clientSecret ? (
+          <form onSubmit={handleEmailSubmit} className="payment-form">
+            <div className="email-field">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+            <button type="submit" disabled={loadingIntent} className="pay-button">
+              {loadingIntent ? "Loading..." : "Continue to Payment"}
+            </button>
+          </form>
+        ) : (
+          <Elements
+            stripe={stripePromise}
+            options={{
+              clientSecret,
+              appearance,
+              fonts: [{ cssSrc: "https://api.fontshare.com/v2/css?f[]=clash-display@400&display=swap" }],
+            }}
+          >
+            <PaymentForm email={email} />
+          </Elements>
+        )}
       </div>
     </div>
   );
