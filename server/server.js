@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Stripe = require("stripe");
+const multer = require("multer");
+const path = require("path");
 require("dotenv").config();
 
 const productRoutes = require("./routes/productRoutes");
@@ -85,6 +87,33 @@ app.post("/api/webhook", express.raw({ type: "application/json" }), async (req, 
 
 // Parse JSON bodies for all other routes
 app.use(express.json());
+
+// Serve uploaded product images
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+
+// ─── Image Upload ─────────────────────────────────────────────────────────────
+const storage = multer.diskStorage({
+  destination: path.join(__dirname, "public/uploads"),
+  filename: (req, file, cb) => {
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    cb(null, unique + path.extname(file.originalname));
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) cb(null, true);
+    else cb(new Error("Only image files are allowed"));
+  },
+});
+
+const { protect, isAdmin } = require("./middleware/authMiddleware");
+
+app.post("/api/upload", protect, isAdmin, upload.single("image"), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+  res.json({ url: `/uploads/${req.file.filename}` });
+});
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/auth", authRoutes);

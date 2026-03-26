@@ -26,13 +26,13 @@ const Product = () => {
     fetchProduct();
   }, [id]);
 
+  const SERVER_BASE = import.meta.env.VITE_API_URL.replace(/\/api$/, "");
+
   const getImageSrc = (image) => {
     if (!image) return "https://via.placeholder.com/220";
-  
     if (image.startsWith("http://") || image.startsWith("https://")) return image;
-  
+    if (image.startsWith("/uploads/")) return `${SERVER_BASE}${image}`;
     if (!image.startsWith("/")) return "/" + image;
-  
     return image;
   };
 

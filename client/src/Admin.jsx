@@ -5,6 +5,8 @@ import ConfirmModal from "./components/ConfirmModal";
 import "./Admin.css";
 
 const emptyForm = { name: "", description: "", price: "", stock: "", image: "" };
+const API = import.meta.env.VITE_API_URL;
+const SERVER_BASE = API.replace(/\/api$/, "");
 
 // Attach the admin JWT to every request from this page
 const authHeaders = () => ({
@@ -20,6 +22,7 @@ const Admin = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -27,7 +30,7 @@ const Admin = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/products`);
+      const res = await axios.get(`${API}/products`);
       setProducts(res.data);
     } catch {
       setError("Failed to load products");
@@ -76,17 +79,9 @@ const Admin = () => {
 
     try {
       if (editingId) {
-        await axios.put(
-          `${import.meta.env.VITE_API_URL}/products/${editingId}`,
-          payload,
-          authHeaders()
-        );
+        await axios.put(`${API}/products/${editingId}`, payload, authHeaders());
       } else {
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/products`,
-          payload,
-          authHeaders()
-        );
+        await axios.post(`${API}/products`, payload, authHeaders());
       }
       await fetchProducts();
       cancelForm();
@@ -101,12 +96,31 @@ const Admin = () => {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    setError("");
+    try {
+      const form = new FormData();
+      form.append("image", file);
+      const res = await axios.post(`${API}/upload`, form, {
+        headers: {
+          ...authHeaders().headers,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setFormData((prev) => ({ ...prev, image: res.data.url }));
+    } catch (err) {
+      setError("Image upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const confirmDelete = async () => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/products/${deleteTarget._id}`,
-        authHeaders()
-      );
+      await axios.delete(`${API}/products/${deleteTarget._id}`, authHeaders());
       await fetchProducts();
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
@@ -168,8 +182,16 @@ const Admin = () => {
                 <input name="stock" type="number" min="0" value={formData.stock} onChange={handleChange} required />
               </div>
               <div className="admin-field">
-                <label>Image path or URL</label>
-                <input name="image" value={formData.image} onChange={handleChange} placeholder="images/products/filename.jpg" />
+                <label>Image</label>
+                <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                {uploading && <span style={{ fontSize: "0.8rem", color: "#555" }}>Uploading...</span>}
+                {formData.image && (
+                  <img
+                    src={formData.image.startsWith("/uploads") ? `${SERVER_BASE}${formData.image}` : formData.image}
+                    alt="preview"
+                    style={{ marginTop: 8, maxHeight: 120, maxWidth: "100%", objectFit: "contain" }}
+                  />
+                )}
               </div>
               <div className="admin-field admin-field--full">
                 <label>Description</label>
