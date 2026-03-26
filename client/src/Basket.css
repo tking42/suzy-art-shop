@@ -1,40 +1,13 @@
 .basket-page {
   max-width: 720px;
-  margin: 0 auto;
-  padding: 48px 2rem 80px;
-  font-family: var(--main-font);
 }
 
-/* ── Header ───────────────────────────────────────── */
-
-.basket-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid #111;
-  padding-bottom: 16px;
+/* Basket items follow directly under the header rule */
+.basket-page .page-header {
   margin-bottom: 0;
-}
-
-.basket-title {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  font-weight: 400;
-}
-
-.basket-count {
-  font-size: 0.75rem;
-  color: #999;
-  letter-spacing: 1px;
 }
 
 /* ── Items ────────────────────────────────────────── */
-
-.basket-items {
-  margin-bottom: 0;
-}
 
 .basket-item {
   display: grid;
@@ -49,7 +22,6 @@
   width: 100px;
   height: 100px;
   overflow: hidden;
-  flex-shrink: 0;
   background: #f0f0f0;
 }
 
@@ -90,7 +62,6 @@
 .qty-controls {
   display: flex;
   align-items: center;
-  gap: 0;
   border: 1px solid #ddd;
 }
 
@@ -156,10 +127,6 @@
 /* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 600px) {
-  .basket-page {
-    padding: 32px 1rem 60px;
-  }
-
   .basket-item {
     grid-template-columns: 80px 1fr;
     grid-template-rows: auto auto;

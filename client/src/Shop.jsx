@@ -41,9 +41,9 @@ const Shop = () => {
 
   return (
     <div className="shop-layout">
-      <div className="shop-header">
-        <h1 className="shop-title">Shop</h1>
-        <span className="shop-count">{products.length} {products.length === 1 ? "work" : "works"}</span>
+      <div className="page-header">
+        <h1 className="page-title">Shop</h1>
+        <span className="page-label">{products.length} {products.length === 1 ? "work" : "works"}</span>
       </div>
       <div className="products-grid">
         {products.map((product) => (

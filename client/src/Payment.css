@@ -1,27 +1,5 @@
 .payment-page {
   max-width: 960px;
-  margin: 0 auto;
-  padding: 48px 2rem 80px;
-  font-family: var(--main-font);
-}
-
-/* ── Header ───────────────────────────────────────── */
-
-.payment-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid #111;
-  padding-bottom: 16px;
-  margin-bottom: 48px;
-}
-
-.payment-title {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  font-weight: 400;
 }
 
 /* ── Layout ───────────────────────────────────────── */
@@ -123,22 +101,15 @@
 }
 
 .checkout-field input {
-  border: 1px solid #ddd;
-  border-bottom-color: #111;
+  border-bottom: 1px solid #111;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 10px 0;
   font-size: 0.9rem;
   font-family: inherit;
   outline: none;
-  border-radius: 0;
   background: transparent;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-}
-
-.checkout-field input:focus {
-  border-bottom-color: #111;
-  outline: none;
 }
 
 .checkout-field-row {
@@ -155,10 +126,6 @@
 /* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .payment-page {
-    padding: 32px 1rem 60px;
-  }
-
   .payment-layout {
     grid-template-columns: 1fr;
     gap: 40px;

@@ -1,127 +1,132 @@
 .navContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+}
+
+.nav-header {
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.hamburger:hover {
+  background: none;
+  transform: none;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #111;
+}
+
+.navButtonsContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.navButton {
+  text-decoration: none;
+  font-size: 16px;
+  color: black;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.3s;
+}
+
+.navButton:hover {
+  border-bottom: 2px solid gray;
+}
+
+.navButton.active {
+  border-bottom: 2px solid black;
+}
+
+.subNav {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 20px;
+  background: #fafafa;
+}
+
+.subNavButton {
+  text-decoration: none;
+  font-size: 13px;
+  color: black;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subNavButton:hover {
+  text-decoration: underline;
+}
+
+.subNavButton--disabled {
+  color: #aaa;
+  cursor: default;
+  pointer-events: none;
+}
+
+.subNavButton--disabled:hover {
+  text-decoration: none;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
-    position: relative;
   }
 
-  .hamburger {
+  .navButtonsContainer {
     display: none;
     flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    cursor: pointer;
-    border-radius: 0;
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .hamburger:hover {
-    background: none;
-    transform: none;
-  }
-
-  .hamburger span {
-    display: block;
-    width: 22px;
-    height: 2px;
-    background: #111;
-  }
-  
-  .navButtonsContainer {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .navButton {
-    text-decoration: none;
-    font-size: 16px;
-    color: black;
-    padding: 5px 0;
-    border-bottom: 2px solid transparent;
-    transition: border-bottom 0.3s;
-  }
-  
-  .navButton:hover {
-    border-bottom: 2px solid gray;
-  }
-  
-  .navButton.active {
-    border-bottom: 2px solid black;
-  }
-
-  .subNav {
-    display: flex;
-    justify-content: flex-end;
-    padding: 6px 20px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     background: #fafafa;
+    border-bottom: 1px solid #ccc;
+    padding: 16px 20px;
+    gap: 16px;
+    z-index: 100;
   }
 
-  .subNavButton {
-    text-decoration: none;
-    font-size: 13px;
-    color: black;
-    letter-spacing: 0.5px;
+  .navButtonsContainer.open {
     display: flex;
-    align-items: center;
-    gap: 6px;
   }
 
-  .subNavButton:hover {
-    text-decoration: underline;
+  nav h1 {
+    font-size: 1rem;
   }
+}
 
-  .subNavButton--disabled {
-    color: #aaa;
-    cursor: default;
-    pointer-events: none;
-  }
-
-  .subNavButton--disabled:hover {
-    text-decoration: none;
-  }
-
-  @media (max-width: 768px) {
-    .hamburger {
-      display: flex;
-    }
-
-    .navButtonsContainer {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: #fafafa;
-      border-bottom: 1px solid #ccc;
-      padding: 16px 20px;
-      gap: 16px;
-      z-index: 100;
-    }
-
-    .navButtonsContainer.open {
-      display: flex;
-    }
-
-    nav h1 {
-      font-size: 1rem;
-    }
-  }
-
-  .basketCount {
-    background: #111;
-    color: #fff;
-    font-size: 11px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.basketCount {
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

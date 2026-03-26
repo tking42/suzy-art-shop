@@ -1,27 +1,10 @@
 .about-page {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 48px 2rem 80px;
-  font-family: var(--main-font);
 }
 
-/* ── Header ───────────────────────────────────────── */
-
-.about-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid #111;
-  padding-bottom: 16px;
+/* Extra breathing room before the large intro quote */
+.about-page .page-header {
   margin-bottom: 56px;
-}
-
-.about-title {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  font-weight: 400;
 }
 
 /* ── Intro ────────────────────────────────────────── */
@@ -43,7 +26,7 @@
 .about-sections {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 48px 64px;
+  gap: 40px 64px;
 }
 
 .about-section {
@@ -69,10 +52,6 @@
 /* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 600px) {
-  .about-page {
-    padding: 32px 1rem 60px;
-  }
-
   .about-intro p {
     font-size: 1.2rem;
   }

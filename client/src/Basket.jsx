@@ -44,7 +44,7 @@ const Basket = () => {
   if (cart.length === 0) return null;
 
   return (
-    <div className="basket-page">
+    <div className="basket-page page-container">
       {pendingRemove && (
         <ConfirmModal
           message={`Remove "${pendingRemove.name}" from your basket?`}
@@ -53,9 +53,9 @@ const Basket = () => {
         />
       )}
 
-      <div className="basket-header">
-        <h1 className="basket-title">Basket</h1>
-        <span className="basket-count">{cart.length} {cart.length === 1 ? "item" : "items"}</span>
+      <div className="page-header">
+        <h1 className="page-title">Basket</h1>
+        <span className="page-label">{cart.length} {cart.length === 1 ? "item" : "items"}</span>
       </div>
 
       <div className="basket-items">

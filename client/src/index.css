@@ -16,7 +16,6 @@
   }
 
   button {
-    border-radius: 999px;
     border: 1px solid black;
     background: white;
     text-transform: uppercase;
@@ -46,7 +45,6 @@
 
   .toast {
     padding: 14px 20px;
-    border-radius: 8px;
     font-size: 0.85rem;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -74,3 +72,39 @@
       transform: translateY(0);
     }
   }
+
+/* ── Shared page layout ───────────────────────────── */
+
+.page-container {
+  margin: 0 auto;
+  padding: 40px 2rem 80px;
+}
+
+.page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid #111;
+  padding-bottom: 16px;
+  margin-bottom: 40px;
+}
+
+.page-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.page-label {
+  font-size: 0.75rem;
+  color: #999;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 32px 1rem 60px;
+  }
+}

@@ -1,9 +1,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import hero1 from "./assets/heroImage1.jpg";
 import hero2 from "./assets/heroImage2.jpg";
 import hero3 from "./assets/heroImage3.jpg";
@@ -14,36 +12,34 @@ const Home = () => {
 
   return (
     <div className="hero-layout">
-      
       <div className="hero-text">
-        <h1>Tea and Cake Productions</h1>
-        <p>Lorem Ipsum, Lorem Ipsum, Lorem Ipsum.</p>
-        
-        <button onClick={() => (window.location.href = "/shop")}>
-          Shop
-        </button>
+        <h1>Original Art &amp; Prints</h1>
+
+        <p className="hero-tagline">Small-batch original works exploring colour, texture, and the quiet moments of everyday life.</p>
+
+        <div className="hero-cta">
+          <button onClick={() => (window.location.href = "/shop")}>
+            Shop Now
+          </button>
+        </div>
       </div>
 
       <div className="hero-carousel-container">
         <Swiper
-          modules={[Pagination, Autoplay]}
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 5000 }}
+          modules={[Autoplay]}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
           loop
           slidesPerView={1}
         >
           {images.map((img, index) => (
             <SwiperSlide key={index}>
-              <div className="hero-slide">
-                <img src={img} alt={`Hero ${index}`} className="hero-image" />
-                <span className="slide-number">0{index + 1}</span>
-              </div>
-          </SwiperSlide>
+              <img src={img} alt={`Artwork ${index + 1}`} className="hero-image" />
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>
-
     </div>
   );
 };
+
 export default Home;

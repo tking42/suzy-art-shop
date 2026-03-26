@@ -112,9 +112,9 @@ const Payment = () => {
   const grandTotal = itemsTotal + SHIPPING_COST;
 
   return (
-    <div className="payment-page">
-      <div className="payment-header">
-        <h1 className="payment-title">Checkout</h1>
+    <div className="payment-page page-container">
+      <div className="page-header">
+        <h1 className="page-title">Checkout</h1>
       </div>
 
       <div className="payment-layout">

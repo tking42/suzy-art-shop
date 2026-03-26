@@ -1,31 +1,5 @@
 .shop-layout {
   padding: 20px 6rem 80px;
-  font-family: var(--main-font);
-}
-
-/* ── Header ───────────────────────────────────────── */
-
-.shop-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  border-bottom: 1px solid #111;
-  padding-bottom: 16px;
-  margin-bottom: 48px;
-}
-
-.shop-title {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  font-weight: 400;
-}
-
-.shop-count {
-  font-size: 0.75rem;
-  color: #999;
-  letter-spacing: 1px;
 }
 
 /* ── Grid ─────────────────────────────────────────── */
@@ -133,7 +107,6 @@
   }
 
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 1px;
   }
 

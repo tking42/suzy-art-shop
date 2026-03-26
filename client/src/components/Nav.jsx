@@ -16,7 +16,7 @@ const Nav = () => {
   return (
     <nav>
       <div className="navContainer">
-        <h1>Tea and Cake Productions</h1>
+        <h1 className="nav-header">Tea and Cake Productions</h1>
 
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
           <span></span>

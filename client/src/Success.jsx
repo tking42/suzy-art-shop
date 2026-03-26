@@ -44,16 +44,18 @@ const Success = () => {
   if (status === "succeeded") {
     return (
       <div className="success-page">
-        <h1>Payment Successful</h1>
-        <p>Thank you for your purchase!</p>
+        <p className="success-label">Order Confirmed</p>
+        <h1 className="success-heading">Thank You</h1>
+        <div className="success-divider" />
+        <p className="success-body">Your order has been received and we'll get to work on it straight away.</p>
         {emailSent === true && (
-          <p>A confirmation email has been sent with your order details. Please check your spam folder if you cannot see it.</p>
+          <p className="success-note">A confirmation email has been sent with your order details. Check your spam folder if you don't see it.</p>
         )}
         {emailSent === false && (
-          <p>We were unable to send a confirmation email. Please keep your order reference for your records.</p>
+          <p className="success-error">We were unable to send a confirmation email — please keep this page for your records.</p>
         )}
         <Link to="/shop">
-          <button style={{ marginTop: "32px" }}>Continue Shopping</button>
+          <button>Continue Shopping</button>
         </Link>
       </div>
     );
@@ -61,10 +63,12 @@ const Success = () => {
 
   return (
     <div className="success-page">
-      <h1>Payment Unsuccessful</h1>
-      <p>Something went wrong with your payment. Please try again.</p>
+      <p className="success-label">Payment Failed</p>
+      <h1 className="success-heading">Something went wrong</h1>
+      <div className="success-divider" />
+      <p className="success-body">Your payment could not be processed. Please try again.</p>
       <Link to="/basket">
-        <button style={{ marginTop: "32px" }}>Back to Basket</button>
+        <button>Back to Basket</button>
       </Link>
     </div>
   );
