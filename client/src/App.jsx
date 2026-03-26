@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Nav from "./components/nav";
+import Footer from "./components/Footer";
 import Home from "./Home";
 import Shop from "./Shop";
-import Contact from "./Contact";
+import About from "./About";
 import Product from "./Product";
 import Basket from "./Basket";
 import Payment from "./Payment";
@@ -12,17 +13,20 @@ import Success from "./Success";
 function App() {
   return (
     <Router>
-      <Nav />
-      <div style={{ padding: "20px" }}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/:id" element={<Product />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/basket" element={<Basket />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/success" element={<Success />} />
-        </Routes>
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <Nav />
+        <main style={{ flex: 1, overflowY: "auto", height: "100%" }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/shop/:id" element={<Product />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/basket" element={<Basket />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/success" element={<Success />} />
+          </Routes>
+        </main>
+        <Footer />
       </div>
     </Router>
   );

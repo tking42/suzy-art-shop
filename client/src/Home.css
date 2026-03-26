@@ -1,8 +1,8 @@
 .hero-layout {
   display: flex;
-  padding: 3rem 6rem 0 6rem;
+  padding: 0 6rem 0 6rem;
   gap: 4rem;
-  min-height: 80vh;
+  height: 100%;
   box-sizing: border-box;
 }
 
@@ -49,11 +49,12 @@
 }
 
 .hero-image {
-  max-height: 70vh;
+  max-height: 60vh;
   width: auto;
   max-width: 100%;
   object-fit: contain;
   transition: transform 0.8s ease;
+  padding: 2.5rem 0;
 }
 
 .swiper-slide-active .hero-image {
@@ -139,9 +140,24 @@
 
   .hero-text h1 {
     margin-top: 0;
-  } 
+  }
 
   .hero-image {
     height: 40vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-layout {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 1rem;
   }
 }
