@@ -1,32 +1,67 @@
 .payment-page {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 0 20px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 2rem 80px;
+  font-family: var(--main-font);
 }
 
-.payment-page h1 {
-  text-align: center;
-  font-size: 2.5rem;
+/* ── Header ───────────────────────────────────────── */
+
+.payment-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid #111;
+  padding-bottom: 16px;
+  margin-bottom: 48px;
+}
+
+.payment-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Layout ───────────────────────────────────────── */
+
+.payment-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* ── Order Summary ────────────────────────────────── */
+
+.order-summary {
+  position: sticky;
+  top: 0;
 }
 
 .order-summary h2 {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   margin: 0 0 20px;
+  font-weight: 400;
+  color: #999;
 }
 
 .summary-item {
   display: flex;
   gap: 12px;
   align-items: baseline;
-  padding: 10px 0;
+  padding: 14px 0;
   border-bottom: 1px solid #eee;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .summary-name {
   flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .summary-qty {
@@ -35,33 +70,35 @@
 }
 
 .summary-shipping .summary-name {
-  color: #666;
+  color: #999;
+  text-transform: none;
 }
 
 .summary-total {
   display: flex;
   justify-content: space-between;
-  padding-top: 16px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  padding-top: 20px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-top: 1px solid #111;
+  margin-top: 4px;
 }
 
+/* ── Form ─────────────────────────────────────────── */
+
 .payment-form {
-  margin-top: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* ── Checkout fields ─────────────────────────────── */
-
 .form-section-label {
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: #555;
-  padding-bottom: 4px;
+  letter-spacing: 2px;
+  color: #999;
+  padding-bottom: 12px;
   border-bottom: 1px solid #eee;
   margin-top: 8px;
 }
@@ -73,36 +110,41 @@
 }
 
 .checkout-field label {
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.7rem;
+  color: #555;
 }
 
 .checkout-field .optional {
   text-transform: none;
   letter-spacing: 0;
-  color: #999;
-  font-size: 0.7rem;
+  color: #bbb;
 }
 
 .checkout-field input {
-  border: 1px solid #ccc;
-  padding: 10px 12px;
-  font-size: 14px;
+  border: 1px solid #ddd;
+  border-bottom-color: #111;
+  padding: 10px 0;
+  font-size: 0.9rem;
   font-family: inherit;
   outline: none;
   border-radius: 0;
-  background: #fff;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 .checkout-field input:focus {
-  border-color: #111;
+  border-bottom-color: #111;
+  outline: none;
 }
 
 .checkout-field-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
 }
 
 .pay-button {
@@ -110,25 +152,20 @@
   margin-top: 8px;
 }
 
-.payment-layout {
-  gap: 60px;
-  margin-top: 32px;
-  align-items: start;
-}
-
-.payment-loading {
-  text-align: center;
-  margin-top: 80px;
-  color: #999;
-}
+/* ── Responsive ───────────────────────────────────── */
 
 @media (max-width: 768px) {
   .payment-page {
-    margin: 20px auto;
+    padding: 32px 1rem 60px;
   }
 
   .payment-layout {
-    gap: 32px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .order-summary {
+    position: static;
   }
 
   .checkout-field-row {

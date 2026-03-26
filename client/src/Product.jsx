@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Product.css";
-import { useContext } from "react";
 import { CartContext } from "./context/CartContext";
 import { ToastContext } from "./context/ToastContext";
+
 const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const API_URL = `${import.meta.env.VITE_API_URL}/products/${id}`;
 
@@ -36,18 +37,27 @@ const Product = () => {
     return image;
   };
 
-  if (!product) return <p>Loading product...</p>;
+  if (!product) return null;
 
   return (
-    <>
-      <div className="product-details">
+    <div className="product-page">
+      <div className="product-image-panel">
+        <img src={getImageSrc(product.image)} alt={product.name} />
+      </div>
+
+      <div className="product-details-panel">
+        <button className="product-breadcrumb" onClick={() => navigate("/shop")}>
+          ← Shop
+        </button>
+
         <h1>{product.name}</h1>
-        <img
-          src={getImageSrc(product.image)}
-          alt={product.name}
-        />
-        <p className="product-price">£{product.price}</p>
-        <p className="product-description">{product.description || "No description available."}</p>
+        <div className="product-divider" />
+        <p className="product-price">£{product.price.toFixed(2)}</p>
+
+        {product.description && (
+          <p className="product-description">{product.description}</p>
+        )}
+
         <button
           className="product-button"
           onClick={() => {
@@ -57,8 +67,12 @@ const Product = () => {
         >
           Add to Cart
         </button>
+
+        {product.stock <= 3 && product.stock > 0 && (
+          <p className="product-stock-note">Only {product.stock} left</p>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

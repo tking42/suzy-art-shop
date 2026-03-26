@@ -3,7 +3,9 @@ import "./About.css";
 const About = () => {
   return (
     <div className="about-page">
-      <h1>About</h1>
+      <div className="about-header">
+        <h1 className="about-title">About</h1>
+      </div>
 
       <div className="about-intro">
         <p>Tea and Cake Productions is a small independent art studio based in the UK, creating original works that explore colour, texture, and the quiet moments of everyday life.</p>

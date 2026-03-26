@@ -113,7 +113,9 @@ const Payment = () => {
 
   return (
     <div className="payment-page">
-      <h1>Payment</h1>
+      <div className="payment-header">
+        <h1 className="payment-title">Checkout</h1>
+      </div>
 
       <div className="payment-layout">
         <div className="order-summary">

@@ -1,40 +1,84 @@
 .about-page {
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 48px 2rem 80px;
+  font-family: var(--main-font);
 }
 
-.about-page h1 {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 32px;
+/* ── Header ───────────────────────────────────────── */
+
+.about-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 1px solid #111;
+  padding-bottom: 16px;
+  margin-bottom: 56px;
 }
+
+.about-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Intro ────────────────────────────────────────── */
 
 .about-intro {
-  text-align: center;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 40px;
-  margin-bottom: 40px;
-  color: #444;
+  margin-bottom: 72px;
 }
 
+.about-intro p {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #111;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* ── Sections ─────────────────────────────────────── */
+
 .about-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px 64px;
+}
+
+.about-section {
+  border-top: 1px solid #111;
+  padding-top: 24px;
 }
 
 .about-section h2 {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin: 0 0 16px;
+  margin: 0 0 20px;
+  font-weight: 400;
 }
 
 .about-section p {
-  line-height: 1.8;
-  color: #444;
+  font-size: 0.9rem;
+  line-height: 1.9;
+  color: #555;
   margin: 0 0 12px;
+}
+
+/* ── Responsive ───────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .about-page {
+    padding: 32px 1rem 60px;
+  }
+
+  .about-intro p {
+    font-size: 1.2rem;
+  }
+
+  .about-sections {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 }
