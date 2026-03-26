@@ -1,0 +1,10 @@
+.success-page {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+@media (max-width: 768px) {
+  .success-page {
+    padding: 40px 20px;
+  }
+}
