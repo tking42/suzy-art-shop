@@ -1,0 +1,262 @@
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+}
+
+.admin-login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 48px 40px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.admin-login-box h1 {
+  margin: 0 0 32px;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Page Layout ──────────────────────────────────── */
+
+.admin-page {
+  min-height: 100vh;
+  background: #fafafa;
+  font-family: var(--main-font);
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.admin-main {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 32px;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.admin-section-header h2 {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* ── Form ─────────────────────────────────────────── */
+
+.admin-form {
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  padding: 28px;
+  margin-bottom: 32px;
+}
+
+.admin-form h3 {
+  margin: 0 0 24px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-field--full {
+  grid-column: 1 / -1;
+}
+
+.admin-field label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+}
+
+.admin-field input,
+.admin-field textarea {
+  border: 1px solid #ccc;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  border-radius: 0;
+  background: #fff;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus {
+  border-color: #111;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* ── Table ────────────────────────────────────────── */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+}
+
+.admin-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-row--editing td {
+  background: #f9f9f9;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+/* ── Buttons ──────────────────────────────────────── */
+
+.admin-btn {
+  border: 1px solid #111;
+  background: #fff;
+  color: #111;
+  padding: 8px 18px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background 0.2s, color 0.2s;
+  margin-top: 0;
+}
+
+.admin-btn:hover {
+  background: #111;
+  color: #fff;
+  transform: none;
+}
+
+.admin-btn--primary {
+  background: #111;
+  color: #fff;
+}
+
+.admin-btn--primary:hover {
+  background: #333;
+}
+
+.admin-btn--small {
+  padding: 5px 12px;
+  font-size: 0.7rem;
+}
+
+.admin-btn--danger {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.admin-btn--danger:hover {
+  background: #c0392b;
+  color: #fff;
+}
+
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.admin-btn:disabled:hover {
+  background: #fff;
+  color: #111;
+}
+
+.admin-btn--primary:disabled:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* ── Error ────────────────────────────────────────── */
+
+.admin-error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin: 0 0 16px;
+}
+
+/* ── Responsive ───────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .admin-main {
+    padding: 0 16px;
+    margin: 24px auto;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table th:nth-child(3),
+  .admin-table td:nth-child(3) {
+    display: none;
+  }
+}
